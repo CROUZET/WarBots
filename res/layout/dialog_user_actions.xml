@@ -1,20 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relative_user_actions"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    
-    <GridLayout
-         android:id="@+id/grid_users_movments"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/user_actions"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="95dp" >
-    </GridLayout>
-    
-    
-    
     
     <ImageView
         android:id="@+id/btn_down"

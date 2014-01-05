@@ -13,6 +13,7 @@ import android.widget.GridLayout;
 import android.widget.GridLayout.Spec;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 public class GameboardActivity extends Activity {
 
@@ -106,7 +107,7 @@ public class GameboardActivity extends Activity {
 		userActions.setContentView(R.layout.dialog_user_actions);
 		
 		// Bouton Up
-		GridLayout gridUserMovments = (GridLayout)userActions.findViewById(R.id.grid_users_movments);
+		RelativeLayout gridUserMovments = (RelativeLayout)userActions.findViewById(R.id.relative_user_actions);
 		ImageView btnUp = new ImageView(this);
 		btnUp.setImageResource(R.drawable.pos_up);
 		btnUp.setOnClickListener(new View.OnClickListener() {
@@ -116,10 +117,13 @@ public class GameboardActivity extends Activity {
 			}
 		});
 
-		Spec rowspecs = GridLayout.spec(0, 1); 
-		Spec colspecs = GridLayout.spec(0, 1);
-		GridLayout.LayoutParams gridLayoutParam = new GridLayout.LayoutParams(rowspecs, colspecs);
-		gridUserMovments.addView(btnUp, gridLayoutParam);
+		//Spec rowspecs = GridLayout.spec(0, 1); 
+		//Spec colspecs = GridLayout.spec(0, 1);
+		//GridLayout.LayoutParams gridLayoutParam = new GridLayout.LayoutParams(rowspecs, colspecs);
+		
+		//RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams()
+		
+		gridUserMovments.addView(btnUp);
 		
 		userActions.show();
 	}
@@ -135,6 +139,10 @@ public class GameboardActivity extends Activity {
 		actionsPreview.addView(preview);
 		
 	}
+	
+	
+	
+	
 	
 
 	
