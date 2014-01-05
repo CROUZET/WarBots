@@ -1,4 +1,4 @@
-package core.bot;
+package cat.can.read.warbots.core.bot;
 
 import java.io.Serializable;
 

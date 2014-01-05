@@ -1,27 +1,24 @@
 package cat.can.read.warbots;
 
-import cat.can.read.warbots.R.drawable;
-import android.os.Bundle;
+import java.util.List;
+
+import cat.can.read.warbots.dialog.actionChooser.ActionChooserEnum;
+import cat.can.read.warbots.dialog.actionChooser.DialogActionChooser;
 import android.app.Activity;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.Menu;
-import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.GridLayout;
 import android.widget.GridLayout.Spec;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 public class GameboardActivity extends Activity {
 
 	private int gameboardSize;
 	
 	private GridLayout gridLayout;
-	
-	private Dialog userActions;
+
+	// -----------------------------------------------------------------------------------------------------------
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +33,7 @@ public class GameboardActivity extends Activity {
 		initRobotPosition();
 		
 		// Start Actions
-		showUserActions();
+		showUserActionsChooser();
 		
 	}
 
@@ -47,13 +44,13 @@ public class GameboardActivity extends Activity {
 		return true;
 	}
 
+	// -----------------------------------------------------------------------------------------------------------
+	
 	private void loadParameters() {
 		
 		Intent intent = getIntent();
 		gameboardSize = Integer.parseInt(intent.getStringExtra(MainActivity.PARAM_GAMEBOARD_SIZE));
 	}
-	
-	
 	
 	private void initGameBoard() {
 
@@ -102,58 +99,29 @@ public class GameboardActivity extends Activity {
 	}
 
 	 
-	public void showUserActions() {
-		userActions = new Dialog(this, R.style.lightbox_dialog);
-		userActions.setContentView(R.layout.dialog_user_actions);
+	private void showUserActionsChooser() {
 		
-		// Bouton Up
-		RelativeLayout gridUserMovments = (RelativeLayout)userActions.findViewById(R.id.relative_user_actions);
-		ImageView btnUp = new ImageView(this);
-		btnUp.setImageResource(R.drawable.pos_up);
-		btnUp.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				addPreview(0);
+		new DialogActionChooser(this);
+	}
+	
+	public void playAction(List<ActionChooserEnum> actions) {
+		
+			for (ActionChooserEnum action : actions) {
+			
+				
+				
+				System.out.println(action.name());
 			}
-		});
-
-		//Spec rowspecs = GridLayout.spec(0, 1); 
-		//Spec colspecs = GridLayout.spec(0, 1);
-		//GridLayout.LayoutParams gridLayoutParam = new GridLayout.LayoutParams(rowspecs, colspecs);
 		
-		//RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams()
-		
-		gridUserMovments.addView(btnUp);
-		
-		userActions.show();
-	}
-
-	private void addPreview(int numAction) {
-		
-		ImageView preview = new ImageView(this);
-		if (numAction == 0) {
-			preview.setImageResource(R.drawable.pos_up);
-		}
-		
-		LinearLayout actionsPreview = (LinearLayout) userActions.findViewById(R.id.user_actions);
-		actionsPreview.addView(preview);
 		
 	}
-	
-	
-	
 	
 	
 
 	
 	 
 	
-	public void hideUserActions() {
-	    if (userActions != null)
-	    	userActions.dismiss();
-	 
-	    userActions = null;
-	}
+
 
 		
 		

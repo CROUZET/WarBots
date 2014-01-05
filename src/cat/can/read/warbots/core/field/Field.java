@@ -1,4 +1,4 @@
-package core.field;
+package cat.can.read.warbots.core.field;
 
 public abstract class Field {
 
