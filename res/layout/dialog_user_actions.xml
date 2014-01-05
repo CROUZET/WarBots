@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    
+    <GridLayout
+         android:id="@+id/grid_users_movments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/user_actions"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="95dp" >
+    </GridLayout>
+    
+    
+    
+    
+    <ImageView
+        android:id="@+id/btn_down"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_left"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/pos_down"
+        android:contentDescription="@string/nothing" />
+
+    <ImageView
+        android:id="@+id/btn_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/btn_down"
+        android:background="@drawable/pos_left"
+        android:contentDescription="@string/nothing" />
+
+    <ImageView
+        android:id="@+id/btn_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btn_down"
+        android:layout_toRightOf="@+id/btn_down"
+        android:background="@drawable/pos_right"
+        android:contentDescription="@string/nothing" />
+
+    <LinearLayout
+        android:id="@+id/user_actions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="45dp"
+        android:orientation="horizontal">
+
+    </LinearLayout>
+
+    
+
+</RelativeLayout>

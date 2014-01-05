@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">WarBots</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_gameboard">GameboardActivity</string>
+
+    <!-- MOVEMENTS -->
+    <string name="pos_up">Forward</string>
+    <string name="pos_down">Backward</string>
+    <string name="pos_left">Turn Left</string>
+    <string name="pos_right">Turn Right</string>
+    
+    <string name="nothing"></string>    
+    
+</resources>
