@@ -5,7 +5,7 @@ public class Constants {
 	/**
 	 * Maximum number of action per turn
 	 */
-	public static final int MAX_ACTION_PER_TURN = 2;
+	public static final int MAX_ACTION_PER_TURN = 6;
 	
 	/**
 	 * Bot moving speed (ms)

@@ -1,6 +1,6 @@
 package cat.can.read.warbots.dialog.actionChooser;
 
-public enum ActionChooserEnum {
+public enum ActionsEnum {
 
 	ACTION_MOVE_UP,
 	ACTION_MOVE_DOWN,

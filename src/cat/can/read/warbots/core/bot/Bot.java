@@ -1,6 +1,11 @@
 package cat.can.read.warbots.core.bot;
 
 import java.io.Serializable;
+import java.util.List;
+
+import cat.can.read.warbots.dialog.actionChooser.ActionsEnum;
+
+import android.widget.ImageView;
 
 public class Bot implements Serializable {
 
@@ -18,7 +23,7 @@ public class Bot implements Serializable {
 	private long armor;
 	
 	private long damage;
-
+	
 	// -----------------------------------------------------------------------------------------------------------
 	
 	public Bot(long hp, long armor, long damage) {

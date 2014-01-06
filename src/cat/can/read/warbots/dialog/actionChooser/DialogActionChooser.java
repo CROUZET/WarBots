@@ -28,7 +28,7 @@ public class DialogActionChooser {
 	
 	private Dialog userActions;
 	
-	private List<ActionChooserEnum> actionChoosen = new ArrayList<ActionChooserEnum>();
+	private List<ActionsEnum> actionChoosen = new ArrayList<ActionsEnum>();
 	
 	// -----------------------------------------------------------------------------------------------------------
 	
@@ -60,7 +60,7 @@ public class DialogActionChooser {
 		button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				addPreview(ActionChooserEnum.ACTION_MOVE_UP);
+				addPreview(ActionsEnum.ACTION_MOVE_UP);
 			}
 		});
 		layout.addView(button, setParams(250, 400));
@@ -73,7 +73,7 @@ public class DialogActionChooser {
 		button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				addPreview(ActionChooserEnum.ACTION_MOVE_DOWN);
+				addPreview(ActionsEnum.ACTION_MOVE_DOWN);
 			}
 		});
 		layout.addView(button, setParams(250, 600));
@@ -86,7 +86,7 @@ public class DialogActionChooser {
 		button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				addPreview(ActionChooserEnum.ACTION_TURN_LEFT);
+				addPreview(ActionsEnum.ACTION_TURN_LEFT);
 			}
 		});
 		layout.addView(button, setParams(200, 500));
@@ -99,7 +99,7 @@ public class DialogActionChooser {
 		button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				addPreview(ActionChooserEnum.ACTION_TURN_RIGHT);
+				addPreview(ActionsEnum.ACTION_TURN_RIGHT);
 			}
 		});
 		layout.addView(button, setParams(300, 500));
@@ -112,7 +112,7 @@ public class DialogActionChooser {
 		return params;
 	}
 	
-	private void addPreview(final ActionChooserEnum action) {
+	private void addPreview(final ActionsEnum action) {
 		
 		ImageView preview = new ImageView(context);
 		actionChoosen.add(action);

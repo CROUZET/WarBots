@@ -4,21 +4,30 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
+import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.GridLayout;
 import android.widget.GridLayout.Spec;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import cat.can.read.warbots.constants.Constants;
-import cat.can.read.warbots.dialog.actionChooser.ActionChooserEnum;
+import cat.can.read.warbots.dialog.actionChooser.ActionsEnum;
 import cat.can.read.warbots.dialog.actionChooser.DialogActionChooser;
+import cat.can.read.warbots.dialog.actionChooser.OrientationEnum;
 
 public class GameboardActivity extends Activity {
 
-	private static final int ANIMATION_BOT_TRANSLATION = 100;
+	//private static final int ANIMATION_BOT_TRANSLATION_ONE_BLOC = 100;
+	
+	private static final int ANIMATION_BOT_ROTATION_ONE_QUARTER = 90;
+	
+	//private static final int ANIMATION_BOT_ROTATION_ON_HIMSELF = 50;
 	
 	// -----------------------------------------------------------------------------------------------------------
 
@@ -32,9 +41,11 @@ public class GameboardActivity extends Activity {
 	
 	private int playersBotPosY;
 	
-	private List<ActionChooserEnum> actionsToPerform;
+	private List<ActionsEnum> actionsToPerform;
 	
 	private int numberActionPlayed;
+	
+	private OrientationEnum botOrientation;
 	
 	
 	// -----------------------------------------------------------------------------------------------------------
@@ -84,7 +95,6 @@ public class GameboardActivity extends Activity {
 			Spec rowspecs = GridLayout.spec(posY); 
 			GridLayout.LayoutParams gridLayoutParam = new GridLayout.LayoutParams(rowspecs, colspecs);
 			
-			
 			ImageView image = new ImageView(this);
 			if (codeField == '1') {
 				image.setBackgroundResource(R.drawable.field_normal);
@@ -114,6 +124,8 @@ public class GameboardActivity extends Activity {
 		Spec rowspecs = GridLayout.spec(playersBotPosY); 
 		GridLayout.LayoutParams gridLayoutParam = new GridLayout.LayoutParams(rowspecs, colspecs);
 		
+		botOrientation = OrientationEnum.NORTH;
+		
 		gridLayout.addView(playersBot, gridLayoutParam);
 	}
 
@@ -123,7 +135,7 @@ public class GameboardActivity extends Activity {
 		new DialogActionChooser(this);
 	}
 	
-	public void playAction(List<ActionChooserEnum> actions) {
+	public void playAction(List<ActionsEnum> actions) {
 			
 		// Play actions until the last one
 		if (numberActionPlayed < actions.size()) {
@@ -138,10 +150,10 @@ public class GameboardActivity extends Activity {
 					moveBotDown();
 					break;	
 				case ACTION_TURN_LEFT :
-					// do
+					turnBotLeft();
 					break;	
 				case ACTION_TURN_RIGHT :
-					// do
+					turnBotRight();
 					break;		
 			}
 			
@@ -150,31 +162,152 @@ public class GameboardActivity extends Activity {
 	}
 	
 	private void moveBotUp() {
-		TranslateAnimation animation = new TranslateAnimation(0, 0, 0, -ANIMATION_BOT_TRANSLATION);
+		
+		boolean canMove = true;
+		
+		View v = gridLayout.getChildAt(0);
+		int gridHeigth = v.getBottom()-v.getTop();
+		
+		TranslateAnimation animation = null;
+		if (botOrientation == OrientationEnum.NORTH) {
+			if (playersBotPosY == 0) {
+				animation = new TranslateAnimation(0, 0, 0, 0);
+				canMove = false;
+			} else {
+				animation = new TranslateAnimation(0, 0, 0, -gridHeigth);
+			}
+		} else if (botOrientation == OrientationEnum.EAST) {
+			if (playersBotPosX == gameboardSize-1) {
+				animation = new TranslateAnimation(0, 0, 0, 0);
+				canMove = false;
+			} else {
+				animation = new TranslateAnimation(0, gridHeigth, 0, 0);
+			}
+		} else if (botOrientation == OrientationEnum.SOUTH) {
+			if (playersBotPosY == gameboardSize-1) {
+				animation = new TranslateAnimation(0, 0, 0, 0);
+				canMove = false;
+			} else {
+				animation = new TranslateAnimation(0, 0, 0, gridHeigth);
+			}
+		} else {
+			if (playersBotPosX == 0) {
+				animation = new TranslateAnimation(0, 0, 0, 0);
+				canMove = false;
+			} else {
+				animation = new TranslateAnimation(0, -gridHeigth, 0, 0);
+			}
+		}
+		
 		animation.setDuration(Constants.BOT_MOVING_SPEED);
 		animation.setFillAfter(false);
-		animation.setAnimationListener(new BotMoveUpAnimationListener());
+		animation.setAnimationListener(new BotMoveUpAnimationListener(canMove));
 		playersBot.startAnimation(animation);
 	}
 	
 	private void moveBotDown() {
-		TranslateAnimation animation = new TranslateAnimation(0, 0, 0, ANIMATION_BOT_TRANSLATION);
+		
+		boolean canMove = true;
+		
+		View v = gridLayout.getChildAt(0);
+		int gridHeigth = v.getBottom()-v.getTop();
+		
+		TranslateAnimation animation;
+		if (botOrientation == OrientationEnum.NORTH) {
+			if (playersBotPosY == gameboardSize-1) {
+				animation = new TranslateAnimation(0, 0, 0, 0);
+				canMove = false;
+			} else {
+				animation = new TranslateAnimation(0, 0, 0, gridHeigth);
+			}
+		} else if (botOrientation == OrientationEnum.EAST) {
+			if (playersBotPosX == 0) {
+				animation = new TranslateAnimation(0, 0, 0, 0);
+				canMove = false;
+			} else {
+				animation = new TranslateAnimation(0, -gridHeigth, 0, 0);
+			}
+		} else if (botOrientation == OrientationEnum.SOUTH) {
+			if (playersBotPosY == 0) {
+				animation = new TranslateAnimation(0, 0, 0, 0);
+				canMove = false;
+			} else {
+				animation = new TranslateAnimation(0, 0, 0, -gridHeigth);
+			}
+		} else {
+			if (playersBotPosX == gameboardSize-1) {
+				animation = new TranslateAnimation(0, 0, 0, 0);
+				canMove = false;
+			} else {
+				animation = new TranslateAnimation(0, gridHeigth, 0, 0);
+			}
+		}
 		animation.setDuration(Constants.BOT_MOVING_SPEED);
 		animation.setFillAfter(false);
-		animation.setAnimationListener(new BotMoveDownAnimationListener());
+		animation.setAnimationListener(new BotMoveDownAnimationListener(canMove));
 		playersBot.startAnimation(animation);
 	}
 	 
+	private void turnBotLeft() {
+		
+		View v = gridLayout.getChildAt(0);
+		int halfSize = (v.getBottom()-v.getTop())/2;
+		
+		RotateAnimation animation = new RotateAnimation(0, -ANIMATION_BOT_ROTATION_ONE_QUARTER, halfSize, halfSize);
+		animation.setDuration(Constants.BOT_MOVING_SPEED);
+		animation.setFillAfter(false);
+		animation.setAnimationListener(new BotTurnLeftAnimationListener());
+		playersBot.startAnimation(animation);
+		botOrientation = botOrientation.getOrientationAfterTurn(ActionsEnum.ACTION_TURN_LEFT);
+	}
+	
+	private void turnBotRight() {
+		
+		View v = gridLayout.getChildAt(0);
+		int halfSize = (v.getBottom()-v.getTop())/2;
+		
+		RotateAnimation animation = new RotateAnimation(0, ANIMATION_BOT_ROTATION_ONE_QUARTER, halfSize, halfSize);
+		animation.setDuration(Constants.BOT_MOVING_SPEED);
+		animation.setFillAfter(false);
+		animation.setAnimationListener(new BotTurnRightAnimationListener());
+		playersBot.startAnimation(animation);
+		botOrientation = botOrientation.getOrientationAfterTurn(ActionsEnum.ACTION_TURN_RIGHT);
+	}
+	
+	
 	private class BotMoveUpAnimationListener implements AnimationListener {
 
+		private boolean canMove;
+		
+		public BotMoveUpAnimationListener(final boolean canMove) {
+			this.canMove = canMove;
+		}
+		
 	    @Override
 	    public void onAnimationEnd(Animation animation) {
+	    	
 	    	playersBot.clearAnimation();
+		
+		    if (canMove) {
+		    	Spec colspecs;
+		    	Spec rowspecs;
+				if (botOrientation == OrientationEnum.NORTH) {
+					colspecs = GridLayout.spec(playersBotPosX);
+					rowspecs = GridLayout.spec(--playersBotPosY); 
+				} else if (botOrientation == OrientationEnum.EAST) {
+					colspecs = GridLayout.spec(++playersBotPosX);
+					rowspecs = GridLayout.spec(playersBotPosY); 
+				} else if (botOrientation == OrientationEnum.SOUTH) {
+					colspecs = GridLayout.spec(playersBotPosX);
+					rowspecs = GridLayout.spec(++playersBotPosY);
+				} else {
+					colspecs = GridLayout.spec(--playersBotPosX);
+					rowspecs = GridLayout.spec(playersBotPosY);
+				}
 	
-			Spec colspecs = GridLayout.spec(playersBotPosX);
-			Spec rowspecs = GridLayout.spec(--playersBotPosY); 
-	    	GridLayout.LayoutParams lp = new GridLayout.LayoutParams(rowspecs, colspecs);
-	        playersBot.setLayoutParams(lp);
+		    	GridLayout.LayoutParams lp = new GridLayout.LayoutParams(rowspecs, colspecs);
+		        playersBot.setLayoutParams(lp);
+	    	}
 	        
 	        playAction(actionsToPerform);
 	    }
@@ -190,14 +323,36 @@ public class GameboardActivity extends Activity {
 
 	private class BotMoveDownAnimationListener implements AnimationListener {
 
+		private boolean canMove;
+		
+		public BotMoveDownAnimationListener(final boolean canMove) {
+			this.canMove = canMove;
+		}
+		
 	    @Override
 	    public void onAnimationEnd(Animation animation) {
 	    	playersBot.clearAnimation();
 
-			Spec colspecs = GridLayout.spec(playersBotPosX);
-			Spec rowspecs = GridLayout.spec(++playersBotPosY); 
-	    	GridLayout.LayoutParams lp = new GridLayout.LayoutParams(rowspecs, colspecs);
-	        playersBot.setLayoutParams(lp);
+	    	if (canMove) {
+		    	Spec colspecs;
+		    	Spec rowspecs;
+				if (botOrientation == OrientationEnum.NORTH) {
+					colspecs = GridLayout.spec(playersBotPosX);
+					rowspecs = GridLayout.spec(++playersBotPosY); 
+				} else if (botOrientation == OrientationEnum.EAST) {
+					colspecs = GridLayout.spec(--playersBotPosX);
+					rowspecs = GridLayout.spec(playersBotPosY); 
+				} else if (botOrientation == OrientationEnum.SOUTH) {
+					colspecs = GridLayout.spec(playersBotPosX);
+					rowspecs = GridLayout.spec(--playersBotPosY);
+				} else {
+					colspecs = GridLayout.spec(++playersBotPosX);
+					rowspecs = GridLayout.spec(playersBotPosY);
+				}
+				
+		    	GridLayout.LayoutParams lp = new GridLayout.LayoutParams(rowspecs, colspecs);
+		        playersBot.setLayoutParams(lp);
+	    	}
 	        
 	        playAction(actionsToPerform);
 	    }
@@ -209,6 +364,57 @@ public class GameboardActivity extends Activity {
 	    @Override
 	    public void onAnimationStart(Animation animation) {
 	    }
+	}
+	
+	private class BotTurnLeftAnimationListener implements AnimationListener {
 
+	    @Override
+	    public void onAnimationEnd(Animation animation) {
+	    	playersBot.clearAnimation();
+	    	
+	    	View v = gridLayout.getChildAt(0);
+			int halfSize = (v.getBottom()-v.getTop())/2;
+			
+	    	Matrix matrix=new Matrix();
+	    	playersBot.setScaleType(ScaleType.MATRIX); 
+	    	matrix.postRotate((float) ANIMATION_BOT_ROTATION_ONE_QUARTER*botOrientation.getVal(), halfSize, halfSize);
+	    	playersBot.setImageMatrix(matrix);
+	    	
+	        playAction(actionsToPerform);
+	    }
+
+	    @Override
+	    public void onAnimationRepeat(Animation animation) {
+	    }
+
+	    @Override
+	    public void onAnimationStart(Animation animation) {
+	    }
+	}
+	
+	private class BotTurnRightAnimationListener implements AnimationListener {
+
+	    @Override
+	    public void onAnimationEnd(Animation animation) {
+	    	playersBot.clearAnimation();
+	    	
+	    	View v = gridLayout.getChildAt(0);
+			int halfSize = (v.getBottom()-v.getTop())/2;
+			
+	    	Matrix matrix=new Matrix();
+	    	playersBot.setScaleType(ScaleType.MATRIX); 
+	    	matrix.postRotate((float) ANIMATION_BOT_ROTATION_ONE_QUARTER*botOrientation.getVal(), halfSize, halfSize);
+	    	playersBot.setImageMatrix(matrix);
+	    	
+	        playAction(actionsToPerform);
+	    }
+
+	    @Override
+	    public void onAnimationRepeat(Animation animation) {
+	    }
+
+	    @Override
+	    public void onAnimationStart(Animation animation) {
+	    }
 	}
 }
