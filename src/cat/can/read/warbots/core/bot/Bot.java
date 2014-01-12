@@ -3,7 +3,7 @@ package cat.can.read.warbots.core.bot;
 import java.io.Serializable;
 import java.util.List;
 
-import cat.can.read.warbots.dialog.actionChooser.ActionsEnum;
+import cat.can.read.warbots.core.enums.ActionsEnum;
 
 import android.widget.ImageView;
 

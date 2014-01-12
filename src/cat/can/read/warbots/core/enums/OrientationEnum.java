@@ -1,4 +1,5 @@
-package cat.can.read.warbots.dialog.actionChooser;
+package cat.can.read.warbots.core.enums;
+
 
 public enum OrientationEnum {
 

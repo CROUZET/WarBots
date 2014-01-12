@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import cat.can.read.warbots.GameboardActivity;
 import cat.can.read.warbots.R;
 import cat.can.read.warbots.constants.Constants;
+import cat.can.read.warbots.core.enums.ActionsEnum;
 
 public class DialogActionChooser {
 
@@ -116,21 +117,8 @@ public class DialogActionChooser {
 		
 		ImageView preview = new ImageView(context);
 		actionChoosen.add(action);
-		switch (action) {
-			case ACTION_MOVE_UP :
-				preview.setImageResource(R.drawable.pos_up);
-				break;
-			case ACTION_MOVE_DOWN :
-				preview.setImageResource(R.drawable.pos_down);
-				break;	
-			case ACTION_TURN_LEFT :
-				preview.setImageResource(R.drawable.pos_left);
-				break;
-			case ACTION_TURN_RIGHT :
-				preview.setImageResource(R.drawable.pos_right);
-				break;
-		}
-
+		preview.setImageResource(action.getImage());
+		
 		LinearLayout actionsPreview = (LinearLayout) userActions.findViewById(R.id.user_actions);
 		actionsPreview.addView(preview);
 		

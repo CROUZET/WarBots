@@ -17,21 +17,18 @@ import android.widget.GridLayout.Spec;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import cat.can.read.warbots.constants.Constants;
-import cat.can.read.warbots.dialog.actionChooser.ActionsEnum;
+import cat.can.read.warbots.core.enums.ActionsEnum;
+import cat.can.read.warbots.core.enums.OrientationEnum;
 import cat.can.read.warbots.dialog.actionChooser.DialogActionChooser;
-import cat.can.read.warbots.dialog.actionChooser.OrientationEnum;
+import cat.can.read.warbots.utils.MapLoader;
 
 public class GameboardActivity extends Activity {
 
-	//private static final int ANIMATION_BOT_TRANSLATION_ONE_BLOC = 100;
-	
 	private static final int ANIMATION_BOT_ROTATION_ONE_QUARTER = 90;
-	
-	//private static final int ANIMATION_BOT_ROTATION_ON_HIMSELF = 50;
 	
 	// -----------------------------------------------------------------------------------------------------------
 
-	private int gameboardSize;
+	//private int gameboardSize;
 	
 	private GridLayout gridLayout;
 
@@ -78,47 +75,22 @@ public class GameboardActivity extends Activity {
 	private void loadParameters() {
 		
 		Intent intent = getIntent();
-		gameboardSize = Integer.parseInt(intent.getStringExtra(MainActivity.PARAM_GAMEBOARD_SIZE));
+		//gameboardSize = Integer.parseInt(intent.getStringExtra(MainActivity.PARAM_GAMEBOARD_SIZE));
 	}
 	
 	private void initGameBoard() {
 
-		String mapOne = "121323231";
-		
-		int cpt = 0;
-		for (char codeField : mapOne.toCharArray()) {
-			
-			int posX=cpt%gameboardSize; //cols index to which i add the button
-			int posY=cpt/gameboardSize; //row index to which i add the button
-			
-			Spec colspecs = GridLayout.spec(posX);
-			Spec rowspecs = GridLayout.spec(posY); 
-			GridLayout.LayoutParams gridLayoutParam = new GridLayout.LayoutParams(rowspecs, colspecs);
-			
-			ImageView image = new ImageView(this);
-			if (codeField == '1') {
-				image.setBackgroundResource(R.drawable.field_normal);
-			} else if (codeField == '2') {
-				image.setBackgroundResource(R.drawable.field_danger);
-			} else {
-				image.setBackgroundResource(R.drawable.field_block);
-			}
-			
-			gridLayout = (GridLayout) findViewById(R.id.thegrid);
-			gridLayout.addView(image, gridLayoutParam);
-
-			cpt++;
-		}
+		gridLayout = (GridLayout) findViewById(R.id.thegrid);
+		MapLoader.construct(this, R.raw.map_dev, gridLayout);
 	}
 		
 	private void initRobotPosition() {
 
-		
 		playersBot = new ImageView(this);
 		playersBot.setImageResource(R.drawable.robot);
-		
-		playersBotPosX = gameboardSize/2;
-		playersBotPosY = gameboardSize-1;
+
+		playersBotPosX = gridLayout.getColumnCount()/2;
+		playersBotPosY = gridLayout.getRowCount()-1;
 		
 		Spec colspecs = GridLayout.spec(playersBotPosX);
 		Spec rowspecs = GridLayout.spec(playersBotPosY); 
@@ -165,8 +137,8 @@ public class GameboardActivity extends Activity {
 		
 		boolean canMove = true;
 		
-		View v = gridLayout.getChildAt(0);
-		int gridHeigth = v.getBottom()-v.getTop();
+		int gridHeigth = gridLayout.getRowCount();
+		int gridwidth = gridLayout.getColumnCount();
 		
 		TranslateAnimation animation = null;
 		if (botOrientation == OrientationEnum.NORTH) {
@@ -177,14 +149,14 @@ public class GameboardActivity extends Activity {
 				animation = new TranslateAnimation(0, 0, 0, -gridHeigth);
 			}
 		} else if (botOrientation == OrientationEnum.EAST) {
-			if (playersBotPosX == gameboardSize-1) {
+			if (playersBotPosX == gridwidth-1) {
 				animation = new TranslateAnimation(0, 0, 0, 0);
 				canMove = false;
 			} else {
 				animation = new TranslateAnimation(0, gridHeigth, 0, 0);
 			}
 		} else if (botOrientation == OrientationEnum.SOUTH) {
-			if (playersBotPosY == gameboardSize-1) {
+			if (playersBotPosY == gridHeigth-1) {
 				animation = new TranslateAnimation(0, 0, 0, 0);
 				canMove = false;
 			} else {
@@ -209,12 +181,12 @@ public class GameboardActivity extends Activity {
 		
 		boolean canMove = true;
 		
-		View v = gridLayout.getChildAt(0);
-		int gridHeigth = v.getBottom()-v.getTop();
+		int gridHeigth = gridLayout.getRowCount();
+		int gridwidth = gridLayout.getColumnCount();
 		
 		TranslateAnimation animation;
 		if (botOrientation == OrientationEnum.NORTH) {
-			if (playersBotPosY == gameboardSize-1) {
+			if (playersBotPosY == gridHeigth-1) {
 				animation = new TranslateAnimation(0, 0, 0, 0);
 				canMove = false;
 			} else {
@@ -235,7 +207,7 @@ public class GameboardActivity extends Activity {
 				animation = new TranslateAnimation(0, 0, 0, -gridHeigth);
 			}
 		} else {
-			if (playersBotPosX == gameboardSize-1) {
+			if (playersBotPosX == gridwidth-1) {
 				animation = new TranslateAnimation(0, 0, 0, 0);
 				canMove = false;
 			} else {

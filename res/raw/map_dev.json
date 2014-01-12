@@ -1,0 +1,23 @@
+{
+	"struct" : [
+		{ "y" : 0, "x" : 0, "type" : "normal" },
+		{ "y" : 0, "x" : 1, "type" : "normal" },
+		{ "y" : 0, "x" : 2, "type" : "danger" },
+	    { "y" : 0, "x" : 3, "type" : "block" },
+		{ "y" : 1, "x" : 0, "type" : "normal" },
+		{ "y" : 1, "x" : 1, "type" : "block" },
+		{ "y" : 1, "x" : 2, "type" : "normal" },
+	    { "y" : 1, "x" : 3, "type" : "block" },
+	    { "y" : 2, "x" : 0, "type" : "danger" },
+		{ "y" : 2, "x" : 1, "type" : "block" },
+		{ "y" : 2, "x" : 2, "type" : "danger" },
+	    { "y" : 2, "x" : 3, "type" : "normal" },
+	    { "y" : 3, "x" : 0, "type" : "block" },
+		{ "y" : 3, "x" : 1, "type" : "danger" },
+		{ "y" : 3, "x" : 2, "type" : "normal" },
+	    { "y" : 3, "x" : 3, "type" : "normal" }
+	],
+	"starts" : [
+		{ "x" : 2, "y" : 3}
+	]
+}
